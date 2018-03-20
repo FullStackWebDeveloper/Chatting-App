@@ -1,4 +1,6 @@
 import Post from './models/post';
+import User from './models/user';
+import cuid from 'cuid';
 
 export default function () {
   Post.count().exec((err, count) => {
@@ -38,6 +40,19 @@ export default function () {
     const post2 = new Post({ name: 'Admin', title: 'Lorem Ipsum', slug: 'lorem-ipsum', cuid: 'cikqgkv4q01ck7453ualdn3hf', content: content2 });
 
     Post.create([post1, post2], (error) => {
+      if (!error) {
+        // console.log('ready to go....');
+      }
+    });
+  });
+
+  User.count().exec((err, count) => {
+    if (count > 0) {
+      return;
+    }
+    const testUser = new User({ username: 'test', email: 'test@test.com', password: 'testuser', cuid: 'cikqgkv4q01ck7453ualdn3hh' });
+
+    User.create([testUser], (error) => {
       if (!error) {
         // console.log('ready to go....');
       }
