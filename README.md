@@ -1,4 +1,4 @@
-![](http://res.cloudinary.com/hashnode/image/upload/w_200/v1466495663/static_imgs/mern/v2/mernio-logo.png)
+![](https://d2ffutrenqvap3.cloudfront.net/items/1b2m0T0e0X3m3v0b0J1y/Screen%20Recording%202018-03-20%20at%2002.59%20PM.gif?v=817c0729)
 
 # mern-starter
 ![title](https://travis-ci.org/Hashnode/mern-starter.svg?branch=v2.0.0)
