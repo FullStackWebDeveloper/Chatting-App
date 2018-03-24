@@ -10,8 +10,8 @@ const errors = {
     REGISTER_USERNAME_TAKEN: 'That username is taken. Try another.',
     REGISTER_EMAIL_TAKEN: 'That email is taken. Try another',
     REGISTER_GENERAL_ERROR: 'an error has occured',
-    LOGIN_INVALID: 'sorry, invalid password',
-    LOGIN_GENERAL_ERROR: 'sorry, invalid username',
+    LOGIN_INVALID: 'Invalid password !',
+    LOGIN_GENERAL_ERROR: 'Unregistered User !',
     USER_NOT_EXIST: 'Sorry, Specified account does not exist',
 };
 
@@ -49,13 +49,31 @@ export function register(req, res) {
 }
 
 export function login(req, res) {
-  if (!req.body.user.username || !req.body.user.password) {
+  if (!(req.body.user.email || req.body.user.username) || !req.body.user.password) {
     return res.status(403).end();
   }
 
-  const username = sanitizeHtml(req.body.user.username);
+  var email = sanitizeHtml(req.body.user.email);
+  var username = sanitizeHtml(req.body.user.username);
+  var data;
+  if (email != 'undefined') {
+      data = {
+          email: email
+      };
+  }
+  else if(username != 'undefined') {
+      data = {
+          username: username
+      };
+  } else {
+      res.json({
+          status: 0,
+          message: err
+      });
+  }
+  console.log(data);
 
-  User.findOne({ username: username }).exec((err, user) => {
+  User.findOne(data).exec((err, user) => {
     if (err) {
       return res.status(500).send({err: errors.LOGIN_GENERAL_ERROR});
     }
@@ -82,6 +100,7 @@ export function login(req, res) {
     });
   });
 }
+
 export function updateUserInfo(req, res) {
     if (!req.body.password) {
       return res.status(403).end();
