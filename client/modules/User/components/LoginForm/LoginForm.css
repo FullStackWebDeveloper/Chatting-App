@@ -54,7 +54,7 @@ textarea {
 
 .error-message {
   color: red;
-  position: absolute;
-  margin-top: -25px;
   margin-left: 10px;
+  height: 30px;
+  text-align: center;
 }

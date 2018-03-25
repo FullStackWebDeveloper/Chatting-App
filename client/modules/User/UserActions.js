@@ -1,6 +1,8 @@
 import cookie from 'react-cookie';
-
 import callApi from '../../util/apiCaller';
+// import { history } from './_helpers';
+import {browserHistory} from 'react-router';
+
 
 // Export Auth Constants
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -33,7 +35,7 @@ export function registerRequest(userInfo) {
 }
 
 export function registerSuccess() {
-  alert('registration successful');
+  browserHistory.push('/login');
   return {
     type: REGISTER_SUCCESS,
   };
@@ -75,6 +77,7 @@ export function loginSuccess(user, token) {
       path: '/'
     }
   );
+  browserHistory.push('/posts');
 
   return {
     type: LOGIN_SUCCESS,
@@ -91,7 +94,7 @@ export function loginFailure(res) {
 }
 export function logout() {
   cookie.remove('mernAuth', { path: '/' });
-  alert('logged out'); 
+  browserHistory.push('/');
   return {
     type: LOGOUT,
   };

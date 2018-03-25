@@ -17,34 +17,46 @@ export class LoginForm extends Component {
   render() {
     return (
       <div className={styles['form-content']}>
+        { 
+          this.props.user.error &&
+          <div className={styles['error-message']} >
+            <span>{this.props.user.error}</span>
+          </div>
+        }
         <h2 className={styles['form-title']}><FormattedMessage id="loginTitle" /></h2>
         <input placeholder={this.props.intl.messages.username} className={styles['form-field']} ref="username" />
-        {(() => {
-          if (this.props.user.error == "Unregistered User !") {
-            return (
-              <div className={styles['error-message']} >
-                <span>{(() => {
-                  return (this.props.user.error)
-                })()}</span>
-              </div>
-            )
-          }
-        })()}
-        <input placeholder={this.props.intl.messages.password} className={styles['form-field']} ref="password" type="password" />
-        {(() => {
-          if (this.props.user.error == "Invalid password !") {
-            return (
-              <div className={styles['error-message']} >
-                <span>{(() => {
-                  return (this.props.user.error)
-                })()}</span>
-              </div>
-            )
-          }
-        })()}
+        <input placeholder={this.props.intl.messages.password} className={styles['form-field']} ref="password" type="password"  />
         <a className={styles['submit-button']} onClick={this.onLogin}><FormattedMessage id="submit" /></a>
       </div>
     );
+  }
+  componentWillMount() {
+    console.log('Component WILL MOUNT!')
+ }
+ componentDidMount() {
+   if(!this.props.user.error) {
+     
+   }
+    console.log('Component DID MOUNT!')
+ }
+ componentWillReceiveProps(newProps) {    
+    console.log('Component WILL RECIEVE PROPS!')
+ }
+ shouldComponentUpdate(newProps, newState) {
+    return true;
+ }
+ componentWillUpdate(nextProps, nextState) {
+    console.log('Component WILL UPDATE!');
+ }
+ componentDidUpdate(prevProps, prevState) {
+    console.log('Component DID UPDATE!')
+ }
+ componentWillUnmount() {
+    console.log('Component WILL UNMOUNT!')
+ }
+  componentWillReceiveProps(nextProps, nextState) {
+    console.log(nextProps);
+    console.log(nextState);
   }
 }
 
