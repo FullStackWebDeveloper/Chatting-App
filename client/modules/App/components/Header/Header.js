@@ -33,6 +33,11 @@ export function Header(props, context) {
                       <FormattedMessage id="logout" />
                     </a>
                     <Link to="/profile" className={styles['add-post-button']} ><FormattedMessage id="profileLink" /></Link>
+                    {
+                      context.router.isActive('/', true)
+                        ? <Link to="/posts" className={styles['add-post-button']} ><FormattedMessage id="postsLink" /></Link>
+                        : null
+                    }
                   </div>
               }
             </div>

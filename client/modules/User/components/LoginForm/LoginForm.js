@@ -24,7 +24,7 @@ export class LoginForm extends Component {
           </div>
         }
         <h2 className={styles['form-title']}><FormattedMessage id="loginTitle" /></h2>
-        <input placeholder={this.props.intl.messages.username} className={styles['form-field']} ref="username" />
+        <input placeholder={this.props.intl.messages.username_email} className={styles['form-field']} ref="username" />
         <input placeholder={this.props.intl.messages.password} className={styles['form-field']} ref="password" type="password"  />
         <a className={styles['submit-button']} onClick={this.onLogin}><FormattedMessage id="submit" /></a>
       </div>

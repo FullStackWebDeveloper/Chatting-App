@@ -1,12 +1,13 @@
 export default {
   locale: 'en',
   messages: {
-    siteTitle: 'MERN Starter Blog',
+    siteTitle: 'Chartting App',
     addPost: 'Add Post',
     switchLanguage: 'Switch Language',
     twitterMessage: 'We are on Twitter',
     by: 'By',
     registerLink: 'Register',
+    postsLink: 'Posts',
     registerTitle: 'Register',
     loginLink: 'Login',
     loginTitle: 'Login',
@@ -14,6 +15,7 @@ export default {
     profileLink: 'Profile',
     profileTitle: ': Change your password',
     username: 'Username',
+    username_email: 'Username or Email',
     password: 'Password',
     confirmPassword: 'Confirm Password',
     newPassword: 'New password',
