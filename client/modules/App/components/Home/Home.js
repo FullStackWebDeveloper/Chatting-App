@@ -10,7 +10,7 @@ import bg from '../../header-bk.png';
 export function Home() {
   return (
     <div className={styles.home}>
-      <h2>Hello ! </h2>
+      <h2>Hello  ! </h2>
     </div>
   );
 }

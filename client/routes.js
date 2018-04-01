@@ -93,5 +93,14 @@ export default (
         });
       }}
     />
+    <Route 
+      path="/chat"
+      onEnter={requireLoggedIn} 
+      getComponent={(nextState, cb) => {
+        require.ensure([], require => {
+          cb(null, require('./modules/Chat/pages/ChatPage/ChatPage').default);
+        });
+      }}
+    />
   </Route>
 );

@@ -38,6 +38,7 @@ export function Header(props, context) {
                         ? <Link to="/posts" className={styles['add-post-button']} ><FormattedMessage id="postsLink" /></Link>
                         : null
                     }
+                    <Link to="/chat" className={styles['add-post-button']} ><FormattedMessage id="chatLink" /></Link>
                   </div>
               }
             </div>
