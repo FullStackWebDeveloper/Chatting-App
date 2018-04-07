@@ -9,7 +9,7 @@ const ChatReducer = (state = initialState, action) => {
       return {
         data: {
           rooms: state.data.rooms,
-          messages: [action.message, ...state.data.messages]
+          messages: [...state.data.messages, action.message]
         },
       };
 

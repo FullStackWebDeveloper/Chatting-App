@@ -13,6 +13,7 @@ const errors = {
     LOGIN_INVALID: 'Invalid password !',
     LOGIN_GENERAL_ERROR: 'Unregistered User !',
     USER_NOT_EXIST: 'Sorry, Specified account does not exist',
+    UNAUTHORIZED: 'Unauthorized'
 };
 
 export function register(req, res) {
@@ -108,7 +109,9 @@ export function updateUserInfo(req, res) {
     try {
       // TODO sanitize req.headers.authorization
       var decoded = jwt.verify(req.headers.authorization, secret.secret);
-      User.findOne({ cuid: decoded.cuid }).exec((err, user) => {
+      console.log(decoded)
+      User.findOne({ cuid: decoded.id }).exec((err, user) => {
+        if(!user) return res.status(401).send({err: errors.UNAUTHORIZED});
         if (err) {
           return res.status(500).send({err: errors.REGISTER_GENERAL_ERROR}); 
         }
@@ -143,12 +146,27 @@ export function updateUserInfo(req, res) {
  * @returns void
  */
 export function getUsers(req, res) {
-  User.find().sort('-dateAdded').exec((err, users) => {
-    if (err) {
-      res.status(500).send(err);
-    }
-    res.json({ users });
-  });
+  try {
+    // TODO sanitize req.headers.authorization
+    var decoded = jwt.verify(req.headers.authorization, secret.secret);
+    console.log(decoded)
+    User.findOne({ cuid: decoded.id }).exec((err, user) => {
+      if (err) {
+        return res.status(500).send({err: errors.REGISTER_GENERAL_ERROR}); 
+      }
+      if(!user) return res.status(401).send({err: errors.UNAUTHORIZED});
+      User.find().sort('-dateAdded').exec((err, users) => {
+        if (err) {
+          res.status(500).send(err);
+        }
+        return res.json({ users });
+      });
+    });
+  } catch(err) {
+    // error during JWT verify
+    console.log('decoded error')
+    return res.status(401).send({err: errors.UNAUTHORIZED}); 
+  }
 }
 
 /**

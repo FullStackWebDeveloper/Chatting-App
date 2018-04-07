@@ -5,93 +5,37 @@ import {browserHistory} from 'react-router';
 
 
 // Export Auth Constants
+export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 export const LOGOUT = 'LOGOUT';
+
+export const UPDATE_USER_INFO_REQUEST = 'UPDATE_USER_INFO_REQUEST'
 export const UPDATE_USER_INFO_SUCCESS = 'UPDATE_USER_INFO_SUCCESS'
 export const UPDATE_USER_INFO_FAILURE = 'UPDATE_USER_INFO_FAILURE'
+
+export const REGISTER_REQUEST = 'REGISTER_REQUEST'
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS'
 export const REGISTER_FAILURE = 'REGISTER_FAILURE'
 export const LOAD_USER_PROPS = 'LOAD_USER_PROPS';
 
+export const GET_ALL_USERS_REQUEST = 'GET_ALL_USERS_REQUEST';
+export const GET_ALL_USERS = 'GET_ALL_USERS';
 
-export function registerRequest(userInfo) {
-  return (dispatch) => {
-    return callApi('register', 'post', {
-      user: {
-          email: userInfo.email,
-          username: userInfo.username,
-          password: userInfo.password,
-        }
-    }).then(res => {
-      if(res.user) {
-        dispatch(registerSuccess())
-      }
-      else {
-        dispatch(registerFailure(res));
-      }
-    });
-  };
-}
-
-export function registerSuccess() {
-  browserHistory.push('/login');
+export function registerRequest(data) {
   return {
-    type: REGISTER_SUCCESS,
-  };
+    type: REGISTER_REQUEST,
+    data: data
+  }
 }
 
-export function registerFailure(res) {
-  alert('registration failed: '+res.err);
+export function loginRequest(data) {
   return {
-    type: REGISTER_FAILURE,
-  };
+    type: LOGIN_REQUEST,
+    data: data
+  }
 }
 
-export function loginRequest(userInfo) {
-  return (dispatch) => {
-  	return callApi('login', 'post', {
-  		user: {
-          username: userInfo.username,
-          password: userInfo.password,
-        }
-    }).then(res => {
-      if(res.user) {
-        dispatch(loginSuccess(res.user, res.token))
-      }
-      else {// invalid credentials
-        dispatch(loginFailure(res));
-      }
-    });
-  };
-}
-
-export function loginSuccess(user, token) {
-  // alert('login successful');
-  cookie.save('mernAuth', {
-      u: user.username,
-      t: token
-    },
-    {
-      maxAge: 31536e3,
-      path: '/'
-    }
-  );
-  browserHistory.push('/posts');
-
-  return {
-    type: LOGIN_SUCCESS,
-    user,
-  }; 
-}
-
-export function loginFailure(res) {
-  // alert('login failed: '+res.err);
-  return {
-    type: LOGIN_FAILURE,
-    err: res.err
-  };
-}
 export function logout() {
   cookie.remove('mernAuth', { path: '/' });
   browserHistory.push('/');
@@ -100,44 +44,24 @@ export function logout() {
   };
 }
 
-export function updateUserInfoRequest(newUserInfo) {
-  return (dispatch) => {
-    let token = cookie.load('mernAuth').t;
-  	return callApi('updateUserInfo', 'post', newUserInfo,
-  		{
-        'content-type': 'application/json',
-        'Authorization': token,
-      }
-    ).then(res => {
-      if(res.user) {
-        dispatch(updateUserInfoSuccess(res.user));
-      }
-      else {
-        dispatch(updateUserInfoFailure(res));
-      }
-    });
-  };
-}
-
-
-export function updateUserInfoSuccess(user) {
-  alert('profile updated successfully');
+export function updateUserInfoRequest(data) {
   return {
-    type: UPDATE_USER_INFO_SUCCESS,
-    user,
-  };
+    type: UPDATE_USER_INFO_REQUEST,
+    data: data
+  }
 }
 
-export function updateUserInfoFailure(res) {
-  alert('update failed: '+res.err);
-  return {
-    type: UPDATE_USER_INFO_FAILURE,
-  };
-}
 
 export function loadUserProps(user) {
   return {
     type: LOAD_USER_PROPS,
     user
   };
+}
+
+export function fetchAllUsers(data) {
+  return {
+    type: GET_ALL_USERS_REQUEST,
+    data: data
+  }; 
 }

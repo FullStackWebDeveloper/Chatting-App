@@ -13,31 +13,49 @@ Object.assign(styles, resetStyles,  mainStyles, fontAwesomeStyles);
 export class MainArea extends Component {
   constructor(props) {
     super(props);
-    this.state = {messages: this.props.messages, username: this.props.username};
+    this.state = {date: ''};
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    this.state.message.value = "";
+    this.refs.messagesArea.scrollTop = this.refs.messagesArea.scrollHeight;
+    this.state.message.style.height = '40px';
   }
 
   showChatHistroy() {
+    console.log(styles["message-date"])
     let chatHistories = [];
-    this.state.messages.forEach(m=>{
+    let date = "";
+    this.props.messages.forEach((m, index)=>{
+      if(date != new Date(m.created_at).toLocaleDateString()) {
+        date = new Date(m.created_at).toLocaleDateString();
+        chatHistories.push(
+          <li key={index + ' ' + 'date'} className={styles["date-line"]}>
+            <span >{date}</span>
+          </li>
+        );
+      }
       chatHistories.push(
-      <li key={m.message_id} className={(m.author == username) ? styles.sent : styles.replies}>
-        <img src="http://emilcarlsson.se/assets/mikeross.png"/>
-        <p>
-            {m.markdown}
-        </p>
-      </li>);
+        <li key={index} className={(m.author == this.props.username) ? styles.sent : styles.replies}>
+          <div className={(m.author == this.props.username) ? styles["message-date"] : styles["message-date"] + ' ' + styles["text-right"]}> {new Date(m.created_at).toLocaleTimeString()} </div>
+          <img src="http://emilcarlsson.se/assets/mikeross.png"/>
+          <p>
+              {m.markdown}
+          </p>
+        </li>);
     });
     return chatHistories;
   }
 
   sendMessage = () => {
     if (this.state.message.value) {
-      // this.props.sendMessage(this.state.message.value);
-      
+      var newMessage = {
+        author: this.props.username,
+        channel_id: this.props.selectedRoomID,
+        markdown: this.state.message.value
+      }
+      this.props.addMessage(newMessage);
     }
-    setTimeout(() => {
-      this.state.message.value = "";
-    }, 10);
     // const message = this.refs.message;
     // console.log(message.value);
   };
@@ -70,7 +88,7 @@ export class MainArea extends Component {
             <i className={styles.fa + " " + styles["fa-instagram"]} />
           </div>
         </div>
-        <div className={styles.messages}>
+        <div className={styles.messages} ref="messagesArea">
           <ul>
             {this.showChatHistroy()}
           </ul>
@@ -82,7 +100,7 @@ export class MainArea extends Component {
               className={styles["message-textarea"]}
               innerRef={node => {
                 this.state.message = node;
-              }}
+              }}              
               onKeyPress={this.handleKeyPress}
             />
             <i
@@ -96,7 +114,7 @@ export class MainArea extends Component {
                 styles["attachment-icon"]
               }
             />
-            <button className={styles.submit + " " + styles["send-button"]}>
+            <button className={styles.submit + " " + styles["send-button"]} onClick={this.sendMessage}>
               <i className={styles.fa + " " + styles["fa-paper-plane"]} />
             </button>
           </div>

@@ -6,12 +6,15 @@ import { isEmail } from 'validator';
 const Schema = mongoose.Schema;
 const SALT_WORK_FACTOR = 10;
 const userSchema = new Schema({
-  username: { type: 'String', required: true, index: { unique: true }},
-  email: { type: 'String', required: true, index: { unique: true }, validate: [ isEmail, 'invalid email' ]},
+  username: { type: 'String', required: true},
+  email: { type: 'String', required: true, validate: [ isEmail, 'invalid email' ]},
   password: { type: 'String', required: true },
   cuid: { type: 'String', required: true },
   dateAdded: { type: 'Date', default: Date.now, required: true },
+  workspace_id: { type: 'String', required: true },
 });
+userSchema.index({username: 1, workspace_id: 1}, {unique: true});
+userSchema.index({email: 1, workspace_id: 1}, {unique: true});
 
 userSchema.pre('save', function(next) {
   var user = this;

@@ -12,7 +12,7 @@ router.route("/register").post(UserController.register);
 router.route("/login").post(UserController.login);
 
 // Update UserInfo
-router.route("/users/update").post(UserController.login);
+router.route("/users/update").post(UserController.updateUserInfo);
 
 // Delete a user by cuid
 router.route("/users/:cuid").delete(UserController.deleteUser);

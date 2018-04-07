@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from "react";
 import { injectIntl, intlShape, FormattedMessage } from "react-intl";
-
 import mainStyles from "../../pages/ChatPage/ChatPage.css";
 import fontAwesomeStyles from "../../pages/ChatPage/font-awesome/css/font-awesome.css";
 import resetStyles from "../../pages/ChatPage/reset.min.css";
@@ -12,29 +11,40 @@ Object.assign(styles, resetStyles,  mainStyles, fontAwesomeStyles);
 export class SideBar extends Component {
   constructor(props) {
     super(props);
-    this.state = {rooms: this.props.rooms, username: this.props.username, selectedRoom: 'general'};
+    this.state = {rooms: this.props.rooms, username: this.props.username, selectedRoom: ''};
   }
 
   onSelectRoom = (channel_id) => {
+    this.state.selectedRoom = channel_id;
     this.props.selectRoom(channel_id);
   };
 
+  componentWillReceiveProps(nextProps, nextState) {
+    if(this.state.selectedRoom == '') {
+      let generalId = '';
+      for(let i =0; i<nextProps.rooms.length; i++) {
+        if(nextProps.rooms[i].title == 'General') {
+          generalId = nextProps.rooms[i].channel_id;
+        }
+      };
+      this.onSelectRoom(generalId);
+    }
+  }
+
   showChannel() {
-    console.log("showChaneel");
-    console.log(this.props.rooms);
     let rooms = [];
-    this.state.rooms.forEach(room=>{
+    this.props.rooms.forEach(room=>{
       rooms.push(
-        <li key={room.channel_id} className={styles.contact + ' ' + this.state.selectedRoom == room.channel_id ? styles.active : ''} onClick={this.onSelectRoom(room.channel_id)}>
-          <div className={styles.wrap}>
+        <li key={room.channel_id} className={this.state.selectedRoom == room.channel_id ? styles.contact + ' ' + styles.active : styles.contact}>
+          <div className={styles.wrap} onClick={() => { this.onSelectRoom(room.channel_id) }}>
             <span className={styles['contact-status'] + ' ' + styles.online} />
             <img
               src="http://emilcarlsson.se/assets/louislitt.png"
               alt=""
             />
             <div className={styles.meta}>
-              <p className={styles.name}>{this.room.title}</p>
-              <p className={styles.preview}>You just got LITT up, Mike.</p>
+              <p className={styles.name}>{room.title}</p>
+              <p className={styles.preview}>{this.props.latestMessage}</p>
             </div>
           </div>
         </li>);
@@ -53,7 +63,7 @@ export class SideBar extends Component {
               className={styles.online}
               alt=""
             />
-            <p>Mike Ross</p>
+            <p>{this.props.username}</p>
             <i className={styles.fa + ' ' + styles['fa-chevron-down'] + ' ' + styles['expand-button']} />
             <div className={styles['status-options']}>
               <ul>
@@ -103,7 +113,7 @@ export class SideBar extends Component {
           </ul>
         </div>
         <div className={styles['bottom-bar']}>
-          <button className={styles.addcontact}>
+          <button className={styles.addcontact} onClick={()=> this.props.modalOpen()}>
             <i className={styles['fa-fa-user-plus'] + ' ' + styles['fa-fw']} />
             <span>Add contact</span>
           </button>
@@ -118,7 +128,8 @@ export class SideBar extends Component {
 }
 
 SideBar.propTypes = {
-  selectRoom: PropTypes.func.isRequired
+  selectRoom: PropTypes.func.isRequired,
+  modalOpen: PropTypes.func.isRequired,
 };
 
 export default injectIntl(SideBar);

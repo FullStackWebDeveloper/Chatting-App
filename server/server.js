@@ -11,8 +11,11 @@ import config from '../webpack.config.dev';
 import webpackDevMiddleware from 'webpack-dev-middleware';
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
+
 // Initialize the Express App
 const app = new Express();
+
+const io = require('socket.io')();
 
 // Set Development modes checks
 const isDevMode = process.env.NODE_ENV === 'development' || false;
@@ -36,8 +39,10 @@ import Helmet from 'react-helmet';
 // Import required modules
 import routes from '../client/routes';
 import { fetchComponentData } from './util/fetchData';
-import posts from './routes/post.routes';
+import workspaces from './routes/workspace.routes';
 import users from './routes/user.routes';
+import rooms from './routes/room.routes';
+import messages from './routes/message.routes';
 import dummyData from './dummyData';
 import serverConfig from './config';
 
@@ -60,8 +65,10 @@ app.use(compression());
 app.use(bodyParser.json({ limit: '20mb' }));
 app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
 app.use(Express.static(path.resolve(__dirname, '../dist/client')));
-app.use('/api', posts);
+app.use('/api', workspaces);
 app.use('/api', users);
+app.use('/api', rooms);
+app.use('/api', messages);
 
 // Render Initial HTML
 const renderFullPage = (html, initialState) => {
@@ -144,6 +151,14 @@ app.use((req, res, next) => {
       .catch((error) => next(error));
   });
 });
+
+
+io.on('connection', (client) => {
+  client.on('new message', (message) => {
+    io.emit('new message', message);
+  });
+});
+io.listen(8001);
 
 // start app
 app.listen(serverConfig.port, (error) => {

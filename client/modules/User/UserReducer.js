@@ -18,6 +18,7 @@ const UserReducer = (state = initialState, action) => {
     case REGISTER_FAILURE:
       return {
         ...state,
+        error: action.err
       };
       
     case LOGIN_SUCCESS:
@@ -55,7 +56,11 @@ const UserReducer = (state = initialState, action) => {
         ...state,
         data: action.user,
       };
-
+    case GET_ALL_USERS:
+      return {
+        ...state,
+        data: action.users,
+      }
     default:
       return state;
   }

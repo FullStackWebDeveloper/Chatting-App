@@ -9,7 +9,6 @@ export function Header(props, context) {
   const languageNodes = props.intl.enabledLanguages.map(
     lang => <li key={lang} onClick={() => props.switchLanguage(lang)} className={lang === props.intl.locale ? styles.selected : ''}>{lang}</li>
   );
-
   return (
     <div className={styles.header}>
       <div className={styles['language-switcher']}>
@@ -29,28 +28,25 @@ export function Header(props, context) {
                 context.router.isActive('/profile', true)
                 ? null
                 : <div>
-                    <a className={styles['add-post-button']} href="#" onClick={props.logout}>
+                    <a className={styles['add-workspace-button']} href="#" onClick={props.logout}>
                       <FormattedMessage id="logout" />
                     </a>
-                    <Link to="/profile" className={styles['add-post-button']} ><FormattedMessage id="profileLink" /></Link>
-                    {
-                      context.router.isActive('/', true)
-                        ? <Link to="/posts" className={styles['add-post-button']} ><FormattedMessage id="postsLink" /></Link>
-                        : null
-                    }
-                    <Link to="/chat" className={styles['add-post-button']} ><FormattedMessage id="chatLink" /></Link>
+                    <Link to={'/workspaces/' + props.params.display_name + "/profile"} className={styles['add-workspace-button']} ><FormattedMessage id="profileLink" /></Link>
+                    <Link to={'/workspaces/' + props.params.display_name + "/chat"} className={styles['add-workspace-button']} ><FormattedMessage id="chatLink" /></Link>
                   </div>
               }
             </div>
           : <div>
-              <Link to="/register" className={styles['add-post-button']} ><FormattedMessage id="registerLink" /></Link>
-              <Link to="/login" className={styles['add-post-button']} ><FormattedMessage id="loginLink" /></Link>
+              {
+                !context.router.isActive('/', true) && !context.router.isActive('/workspaces', true)
+                ?  <div>
+                      <Link to={'/workspaces/' + props.params.display_name + "/register"} className={styles['add-workspace-button']} ><FormattedMessage id="registerLink" /></Link>
+                      <Link to={'/workspaces/' + props.params.display_name + "/login"} className={styles['add-workspace-button']} ><FormattedMessage id="loginLink" /></Link>
+                    </div>
+                  : null
+              }
+            <Link to={"/workspaces"} className={styles['add-workspace-button']} ><FormattedMessage id="workspacesLink" /></Link>
             </div>
-        }
-        {
-          context.router.isActive('/posts', true)
-            ? <a className={styles['add-post-button']} href="#" onClick={props.toggleAddPost}><FormattedMessage id="addPost" /></a>
-            : null
         }
       </div>
     </div>
@@ -62,7 +58,7 @@ Header.contextTypes = {
 };
 
 Header.propTypes = {
-  toggleAddPost: PropTypes.func.isRequired,
+  toggleAddWorkspace: PropTypes.func.isRequired,
   switchLanguage: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired,
   user: PropTypes.shape({

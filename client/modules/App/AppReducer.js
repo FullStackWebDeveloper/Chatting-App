@@ -3,14 +3,14 @@ import { TOGGLE_ADD_POST } from './AppActions';
 
 // Initial State
 const initialState = {
-  showAddPost: false,
+  showAddWorkspace: false,
 };
 
 const AppReducer = (state = initialState, action) => {
   switch (action.type) {
     case TOGGLE_ADD_POST:
       return {
-        showAddPost: !state.showAddPost,
+        showAddWorkspace: !state.showAddWorkspace,
       };
 
     default:
@@ -20,8 +20,8 @@ const AppReducer = (state = initialState, action) => {
 
 /* Selectors */
 
-// Get showAddPost
-export const getShowAddPost = state => state.app.showAddPost;
+// Get showAddWorkspace
+export const getShowAddWorkspace = state => state.app.showAddWorkspace;
 
 // Export Reducer
 export default AppReducer;

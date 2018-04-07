@@ -324,6 +324,7 @@
     border-top: 1px solid #32465a;
     border-bottom: 1px solid #32465a;
     font-weight: 300;
+    margin-bottom: 10px;
   }
 
   @media screen and (max-width: 735px) {
@@ -340,7 +341,7 @@
   .frame .sidepanel .search input {
     font-family: "proxima-nova", "Source Sans Pro", sans-serif;
     padding: 10px 0 10px 46px;
-    width: calc(100% - 25px);
+    width: 100%;
     border: none;
     background: #32465a;
     color: #f5f5f5;
@@ -352,19 +353,19 @@
   }
 
   .frame .sidepanel .search input::-webkit-input-placeholder {
-    color: #f5f5f5;
+    color: darkgray;
   }
 
   .frame .sidepanel .search input::-moz-placeholder {
-    color: #f5f5f5;
+    color: darkgray;
   }
 
   .frame .sidepanel .search input:-ms-input-placeholder {
-    color: #f5f5f5;
+    color: darkgray;
   }
 
   .frame .sidepanel .search input:-moz-placeholder {
-    color: #f5f5f5;
+    color: darkgray;
   }
 
   .frame .sidepanel .contacts {
@@ -518,6 +519,7 @@
     float: left;
     border: none;
     width: 50%;
+    height: 40px;
     padding: 10px 0;
     background: #32465a;
     color: #f5f5f5;
@@ -628,8 +630,8 @@
 
   .frame .content .messages {
     height: auto;
-    min-height: calc(100% - 93px);
-    max-height: calc(100% - 93px);
+    min-height: calc(100% - 123px);
+    max-height: calc(100% - 123px);
     overflow-y: scroll;
     overflow-x: hidden;
   }
@@ -693,6 +695,8 @@
     border-radius: 20px;
     max-width: 205px;
     line-height: 130%;
+    word-wrap: break-word;
+    white-space: pre-line;
   }
 
   @media screen and (min-width: 735px) {
@@ -734,7 +738,7 @@
 
   .frame .content .message-input .wrap .attachment {
     position: absolute;
-    right: 60px;
+    right: 70px;
     z-index: 4;
     margin-top: 10px;
     font-size: 1.1em;
@@ -779,11 +783,11 @@
   }
 
   .message-textarea {
-    width: 100%;
+    width: calc(100% - 50px);
     padding: 10px;
     padding-right: 80px;
     margin-bottom: -3px;
-    min-height: 40px;
+    min-height: 41px;
     max-height: 80px;
     resize: none;
   }
@@ -796,4 +800,27 @@
     right: 0;
     bottom: 0;
     z-index: 4;
+  }
+
+  .message-date {
+      color: darkgray;
+      font-size: 12px;
+      margin-bottom: 5px;
+  }
+
+  .text-right {
+      text-align: right;
+  }
+
+  .date-line {
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #000;
+    line-height: 0.1em;
+    margin: 10px 0 20px;
+  }
+
+  .date-line > span {
+    background: #E6EAEA;
+    padding: 0 10px;
   }

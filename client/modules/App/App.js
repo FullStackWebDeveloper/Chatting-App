@@ -11,7 +11,7 @@ import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 
 // Import Actions
-import { toggleAddPost } from './AppActions';
+import { toggleAddWorkspace } from './AppActions';
 import { switchLanguage } from '../../modules/Intl/IntlActions';
 import { loadUserProps, logout } from '../../modules/User/UserActions';
 
@@ -41,8 +41,8 @@ export class App extends Component {
     this.props.dispatch(logout());
   };
 
-  toggleAddPostSection = () => {
-    this.props.dispatch(toggleAddPost());
+  toggleAddWorkspaceSection = () => {
+    this.props.dispatch(toggleAddWorkspace());
   };
 
   render() {
@@ -68,9 +68,10 @@ export class App extends Component {
           <Header
             switchLanguage={lang => this.props.dispatch(switchLanguage(lang))}
             intl={this.props.intl}
-            toggleAddPost={this.toggleAddPostSection}
+            toggleAddWorkspace={this.toggleAddWorkspaceSection}
             logout={this.handleLogout}
             user={this.props.user}
+            params={this.props.params}
           />
           <div className={styles.container}>
             {this.props.children}
