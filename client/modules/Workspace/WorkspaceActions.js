@@ -3,6 +3,8 @@ import callApi from '../../util/apiCaller';
 // Export Constants
 export const ADD_WORKSPACE            = 'ADD_WORKSPACE';
 export const ADD_WORKSPACE_REQUEST    = 'ADD_WORKSPACE_REQUEST';
+export const SEND_EMAIL            = 'SEND_EMAIL';
+// export const ADD_WORKSPACE_REQUEST    = 'ADD_WORKSPACE_REQUEST';
 
 export const ADD_WORKSPACES           = 'ADD_WORKSPACES';
 export const GET_WORKSPACES_REQUEST   = 'GET_WORKSPACES_REQUEST';
@@ -11,7 +13,16 @@ export const GET_WORKSPACE_REQUEST    = 'GET_WORKSPACE_REQUEST';
 export const DELETE_WORKSPACE         = 'DELETE_WORKSPACE';
 export const DELETE_WORKSPACE_REQUEST = 'DELETE_WORKSPACE_REQUEST';
 
+
 // Export Actions
+
+export function sendEmail(data) {
+  return {
+    type: SEND_EMAIL,
+    data,
+  };
+}
+
 export function addWorkspace(workspace) {
   return {
     type: ADD_WORKSPACE,

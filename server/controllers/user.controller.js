@@ -5,6 +5,8 @@ import cuid from 'cuid';
 import crypto from 'crypto'; 
 import jwt from 'jsonwebtoken';
 import sanitizeHtml from 'sanitize-html';
+const sendmail = require('sendmail')({silent: true});
+var nodemailer = require('nodemailer');
 
 const errors = {
     REGISTER_USERNAME_TAKEN: 'That username is taken. Try another.',
@@ -226,3 +228,84 @@ export function authorizedUser(req, res) {
     return res.status(401).send({err: errors.UNAUTHORIZED}); 
   }
 }
+
+export function sendEmail(req, res) {
+  let html = "<b>results: <b>";
+  User.find({email: req.body.email}).exec((err, users) => {
+    if (err) {
+      res.status(500).send(err);
+    }
+    getWorkspaces(users, req.body.email);
+    
+    return res.json({ result: "success" });
+  });
+}
+
+// async function getWorkspaces(users) {
+//   var results = [];
+//   users.forEach((user) => {
+//     var result = await getWorkspaces(user);
+//     console.log("-----");
+//     console.log(result)
+//     results.push(result)
+//   });
+//   return results;
+// }
+
+// function getWorkspace(user) {
+//   try {
+//     return new Promise(resolve => {
+//       Workspace.find({display_name: user.workspace_title}).exec((err, workspaces) => {
+//         resolve(workspaces[0].display_name);
+//       });
+//     });
+//   } catch (err) {
+//     return 'error occured';
+//   }
+// }
+
+function getWorkspace(user) {
+  return new Promise(resolve => {
+    Workspace.find({display_name: user.workspace_title}).exec((err, workspaces) => {
+      resolve(workspaces[0].display_name);
+    });
+  });
+}
+
+async function getWorkspaces(users, email) {
+  var html = "";
+  console.log('calling');
+  for(let i=0; i<users.length; i++){
+    var result = await getWorkspace(users[i]);
+    console.log(result);
+    html = html + "localhost://8000/" + result + "<br>";
+  }
+  // Create a SMTP transport object
+  var transport = nodemailer.createTransport({
+      service: 'Hotmail',
+      auth: {
+          user: "samuelsteven.ss@outlook.com",
+          pass: "aiddyrpro1112"
+      }
+  });
+  // console.log(html)
+  // Message object
+  var message = {
+    from: 'samuelsteven.ss@outlook.com',
+    to: email,
+    subject:"Workspaces",
+    text: "workspaces",
+    html: html
+  };
+
+  console.log('Sending Mail');
+  transport.sendMail(message, function(error){
+  if(error){
+    console.log('Error occured');
+    console.log(error.message);
+    return;
+  }
+  console.log('Message sent successfully!');
+  });
+}
+

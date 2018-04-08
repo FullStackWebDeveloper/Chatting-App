@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import {
+  Col,
   Button,
   ButtonToolbar,
   Modal,
@@ -14,7 +15,7 @@ import WorkspaceList from '../../components/WorkspaceList';
 import WorkspaceCreateWidget from '../../components/WorkspaceCreateWidget/WorkspaceCreateWidget';
 
 // Import Actions
-import { addWorkspaceRequest, fetchWorkspaces, deleteWorkspaceRequest } from '../../WorkspaceActions';
+import { addWorkspaceRequest, fetchWorkspaces, deleteWorkspaceRequest, sendEmail } from '../../WorkspaceActions';
 import { toggleAddWorkspace } from '../../../App/AppActions';
 
 // Import Selectors
@@ -23,12 +24,27 @@ import { getWorkspaces } from '../../WorkspaceReducer';
 
 
 class WorkspaceListPage extends Component {
+  constructor(props, context) {
+    super(props, context);
+
+    // this.handleChange = this.handleChange.bind(this);
+
+    this.state = {
+      send_email: "",
+    };
+  }
+
   componentWillReceiveProps(nextProps, nextState) {
     console.log("-------");
     console.log(nextProps);
     console.log(nextState);
     // let latestMessage = nextProps.messages.length > 0 ? nextProps.messages[nextProps.messages.length-1].markdown : '';
     // this.setState({rooms: nextProps.rooms, messages: nextProps.messages, latestMessage: latestMessage});
+  }
+
+ 
+  sendEmail = () => {
+    this.props.dispatch(sendEmail(this.state.send_email));
   }
 
   handleDeleteWorkspace = workspace => {
@@ -48,9 +64,22 @@ class WorkspaceListPage extends Component {
         <Tabs defaultActiveKey={1} id="uncontrolled-tab-example">
           <Tab eventKey={1} title="Workstapce List">
             <WorkspaceList handleDeleteWorkspace={this.handleDeleteWorkspace} workspaces={this.props.workspaces} />
+            <Col>
+              <FormControl
+                  type="text"
+                  value={this.state.send_email}
+                  placeholder="Enter Full Name"
+                  onChange={e => {
+                    this.setState({ send_email: e.target.value });
+                  }}
+                />
+                <Button onClick={this.sendEmail}>
+                  Semd
+                </Button>
+            </Col>
           </Tab>
           <Tab eventKey={2} title="Create Workspace">
-          <WorkspaceCreateWidget addWorkspace={this.handleAddWorkspace} />
+            <WorkspaceCreateWidget addWorkspace={this.handleAddWorkspace} />
           </Tab>
         </Tabs>
       </div>

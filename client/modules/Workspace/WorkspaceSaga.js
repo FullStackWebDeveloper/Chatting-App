@@ -9,7 +9,8 @@ import {
     ADD_WORKSPACES,          
     ADD_WORKSPACES_REQUEST,  
     DELETE_WORKSPACE,        
-    DELETE_WORKSPACE_REQUEST
+    DELETE_WORKSPACE_REQUEST,
+    SEND_EMAIL
 } from "./WorkspaceActions";
 import { REGISTER_REQUEST } from "../User/UserActions";
 
@@ -56,6 +57,47 @@ export function* addWorkspaceFlow() {
     }
   }
 }
+
+export function* sendEmailFlow() {
+  while (true) {
+    let request = yield take(SEND_EMAIL);
+    console.log(request)
+    let data = {
+      api: "users/send",
+      type: "post",
+      body: {
+        email: request.data
+      }
+    };
+    let res = yield call(submit, data);
+    // if (res.workspace) {
+    //   yield put({ type: ADD_WORKSPACE, workspace: res.workspace });
+    //   let userData = {
+    //     username: res.workspace.display_name,
+    //     email: res.workspace.admin_user,
+    //     password: request.data.workspace.password,
+    //     workspace_title: res.workspace.display_name
+    //   }
+    //   yield put({ type: REGISTER_REQUEST, data: userData, workspace_title: request.data.workspace.display_name});
+
+    //   let generalRoom = {
+    //     owner:  res.workspace.display_name,
+    //     members: [],
+    //     title: 'General',
+    //     type: 'general',
+    //     workspace_title: res.workspace.display_name
+    //   }
+    //   yield put({ type: ADD_ROOM_REQUEST, data: generalRoom });
+      
+    //   // browserHistory.push("/workspaces");
+    //   // yield apply(browserHistory, browserHistory.push, [`/workspaces/${request.data.workspace.display_name}/login`])
+    // } else {
+    //     console.log(res.err);
+    // //   yield put({ type: ADD_WORKSPACE_FAILURE, err: res.err });
+    // }
+  }
+}
+
 
 export function* fetchWrokspacesFlow() {
     while (true) {

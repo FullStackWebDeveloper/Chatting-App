@@ -2,7 +2,7 @@ import { call, fork, take, put } from 'redux-saga/effects';
 import callApi from "./util/apiCaller";
 import { loadUserFlow, loginFlow, updateUserInfoFlow, registerFlow,fetchAllUsersFlow } from './modules/User/UserSagas';
 import { addMessageFlow, fetchMessagesFlow, deleteMessageFlow, addRoomFlow, fetchRoomsFlow, deleteRoomFlow } from './modules/Chat/ChatSagas';
-import { addWorkspaceFlow, fetchWrokspacesFlow, deleteWorkspaceFlow  } from "./modules/Workspace/WorkspaceSaga";
+import { addWorkspaceFlow, fetchWrokspacesFlow, deleteWorkspaceFlow, sendEmailFlow  } from "./modules/Workspace/WorkspaceSaga";
 
 export function submit(data) {
   if(data.type == "get") {    
@@ -39,5 +39,6 @@ export default function *rootSaga() {
   yield fork(addWorkspaceFlow);
   yield fork(fetchWrokspacesFlow);
   yield fork(deleteWorkspaceFlow);
+  yield fork(sendEmailFlow);
   return true;
 }

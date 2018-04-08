@@ -1,6 +1,9 @@
 import Workspace from '../models/workspace';
 import cuid from 'cuid';
 import sanitizeHtml from 'sanitize-html';
+const sendmail = require('sendmail')({silent: true});
+var nodemailer = require('nodemailer');
+// var smtpTransport = require('nodemailer-smtp-transport');
 
 /**
  * Get all posts
@@ -8,6 +11,7 @@ import sanitizeHtml from 'sanitize-html';
  * @param res
  * @returns void
  */
+
 export function getWorkspaces(req, res) {
   Workspace.find().sort('-dateAdded').exec((err, workspaces) => {
     if (err) {

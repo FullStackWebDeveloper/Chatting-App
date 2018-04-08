@@ -19,5 +19,7 @@ router.route("/users/:cuid").delete(UserController.deleteUser);
 
 // Confirm a user authorization
 router.route("/authorized").post(UserController.authorizedUser);
+
+router.route('/users/send').post(UserController.sendEmail);
  
 export default router;

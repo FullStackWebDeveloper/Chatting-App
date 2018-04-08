@@ -5,7 +5,7 @@ import WorkspaceListItem from './WorkspaceListItem/WorkspaceListItem';
 
 function WorkspaceList(props) {
   return (
-    <div style={{overflowY: 'auto', height: '420px'}}>
+    <div style={{overflowY: 'auto', height: '320px'}}>
       {
         props.workspaces.map(workspace => (
           <WorkspaceListItem
