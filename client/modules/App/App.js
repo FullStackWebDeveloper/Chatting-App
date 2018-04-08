@@ -17,6 +17,10 @@ import { loadUserProps, logout } from '../../modules/User/UserActions';
 
 // Import cookie
 import cookie from 'react-cookie';
+import { fetchWorkspaces } from '../Workspace/WorkspaceActions';
+import { getWorkspace } from '../Workspace/WorkspaceReducer';
+import { browserHistory } from 'react-router';
+
 
 export class App extends Component {
   constructor(props) {
@@ -26,6 +30,7 @@ export class App extends Component {
 
   componentDidMount() {
     this.setState({isMounted: true}); // eslint-disable-line
+    this.props.dispatch(fetchWorkspaces());    
   }
 
   componentWillMount() {
@@ -37,6 +42,13 @@ export class App extends Component {
       this.props.dispatch(loadUserProps( {token: token, username: username} ));
     } 
   }
+
+  componentWillReceiveProps(nextProps, nextState) {
+    console.log(nextProps)
+      if(nextProps.user) {
+        browserHistory.push(nextProps.user.user.workspace_title);
+      }
+  }
     
   handleLogout = () => {
     this.props.dispatch(logout());
@@ -47,7 +59,7 @@ export class App extends Component {
   };
 
   render() {
-    console.log(this.props)
+    console.log(JSON.stringify(this.props.params))
     return (
       <div>
         {this.state.isMounted && !window.devToolsExtension && process.env.NODE_ENV === 'development' && <DevTools />}
@@ -98,7 +110,7 @@ App.propTypes = {
 function mapStateToProps(store) {
   return {
     intl: store.intl,
-    user: store.user.data,
+    user: store.user.data
   };
 }
 

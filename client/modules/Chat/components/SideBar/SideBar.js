@@ -34,6 +34,9 @@ export class SideBar extends Component {
   showChannel() {
     let rooms = [];
     this.props.rooms.forEach(room=>{
+      console.log(room.members)
+      console.log(this.props.username)
+      if(room.members.indexOf(this.props.username) > -1 || room.type == "general" || room.owner == this.props.username)
       rooms.push(
         <li key={room.channel_id} className={this.state.selectedRoom == room.channel_id ? styles.contact + ' ' + styles.active : styles.contact}>
           <div className={styles.wrap} onClick={() => { this.onSelectRoom(room.channel_id) }}>

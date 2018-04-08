@@ -98,6 +98,7 @@ export function *addRoomFlow() {
           owner: request.data.owner,
           members: request.data.members,
           title: request.data.title,
+          type: request.data.type,
           workspace_title: request.data.workspace_title
         }
       }

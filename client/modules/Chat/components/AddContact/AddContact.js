@@ -72,8 +72,12 @@ export class AddContact extends React.Component {
 
   addContact = () => {
     if (this.state.value && this.state.title) {
-        console.log(this.state.value)
-        console.log("success valid");
+      this.props.addRoom({
+        members: this.state.value.split(','),
+        owner: this.props.username,
+        title: this.state.title,
+        type: "rooms"
+      });
     } else {
         console.log("wrong valid");
         this.setState({value: this.state.value == null? '' : this.state.value, title: this.state.title == null? '': this.state.title})

@@ -9,7 +9,7 @@ export function Header(props, context) {
   const languageNodes = props.intl.enabledLanguages.map(
     lang => <li key={lang} onClick={() => props.switchLanguage(lang)} className={lang === props.intl.locale ? styles.selected : ''}>{lang}</li>
   );
-  console.log(props)
+  console.log(props);
   return (
     <div className={styles.header}>
       <div className={styles['language-switcher']}>
@@ -32,8 +32,8 @@ export function Header(props, context) {
                     <a className={styles['add-workspace-button']} href="#" onClick={props.logout}>
                       <FormattedMessage id="logout" />
                     </a>
-                    <Link to={'/workspaces/' + props.params.display_name + "/profile"} className={styles['add-workspace-button']} ><FormattedMessage id="profileLink" /></Link>
-                    <Link to={'/workspaces/' + props.params.display_name + "/chat"} className={styles['add-workspace-button']} ><FormattedMessage id="chatLink" /></Link>
+                    <Link to={'/workspaces/' + props.user.user.workspace_title + "/profile"} className={styles['add-workspace-button']} ><FormattedMessage id="profileLink" /></Link>
+                    <Link to={'/workspaces/' + props.user.user.workspace_title + "/chat"} className={styles['add-workspace-button']} ><FormattedMessage id="chatLink" /></Link>
                   </div>
               }
             </div>

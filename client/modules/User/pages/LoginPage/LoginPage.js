@@ -20,9 +20,9 @@ class LoginPage extends Component {
   };
 
   componentDidMount() {
-    if(!this.props.workspace) {
-      this.props.dispatch(fetchWorkspaces());
-    }
+    // if(!this.props.workspace) {
+    //   this.props.dispatch(fetchWorkspaces());
+    // }
   }
 
   componentWillReceiveProps(nextProps, nextState) {

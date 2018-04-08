@@ -27,6 +27,7 @@ export function addRoom(req, res) {
   // Let's sanitize inputs
   newRoom.title = sanitizeHtml(newRoom.title);
   newRoom.owner = sanitizeHtml(newRoom.owner);
+  newRoom.type = sanitizeHtml(newRoom.type);
   newRoom.workspace_title = sanitizeHtml(newRoom.workspace_title);
   newRoom.channel_id = cuid();
   

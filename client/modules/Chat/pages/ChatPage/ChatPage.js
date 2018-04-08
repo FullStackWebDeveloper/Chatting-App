@@ -10,7 +10,7 @@ import { SideBar } from '../../components/SideBar/SideBar';
 import AddContact from "../../components/AddContact/AddContact";
 
 // Import Actions
-import { addMessageRequest, fetchMessages, fetchRooms } from '../../ChatActions';
+import { addMessageRequest, fetchMessages, fetchRooms, addRoomRequest } from '../../ChatActions';
 import { getUser, getUsers } from '../../../User/UserReducer';
 import { fetchAllUsers } from '../../../User/UserActions';
 import { getMessages, getRooms } from '../../ChatReducer';
@@ -30,8 +30,8 @@ class ChatPage extends Component {
     this.closeModal = this.closeModal.bind(this);
   }
 
-  addRoom() {
-    console.log("asdf");
+  addRoom = (data)=> {
+    this.props.dispatch(addRoomRequest({...data, workspace_title: this.props.params.display_name}));
   }
 
   openModal() {
@@ -45,19 +45,19 @@ class ChatPage extends Component {
   componentDidMount() {
     // this.props.dispatch(fetchMessages('cjfg9ys8y000030ui87jffylq'));
     socket.on('new message', message=> {
-      if(this.props.user.username != message.author)
-      this.setState({rooms: this.state.rooms, messages: [...this.state.messages, message], latestMessage: message.markdown});
+      if(this.props.user.username != message.author && this.props.selectedRoomID == message.channel_id || this.state.rooms.filter(r => r.channel_id == message.channel_id)[0].type == "general")
+      this.setState({modalIsOpen: false, rooms: this.state.rooms, messages: [...this.state.messages, message], latestMessage: message.markdown});
     });
   }
 
   componentWillReceiveProps(nextProps, nextState) {
     if(!this.props.user) {
-      // browserHistory.push('/');
+      browserHistory.push('/');
     } else {
       console.log(JSON.stringify(this.state.rooms) != JSON.stringify(nextProps.rooms))
       if(JSON.stringify(this.state.rooms) != JSON.stringify(nextProps.rooms) || this.state.messages != nextProps.messages) {
         let latestMessage = nextProps.messages.length > 0 ? nextProps.messages[nextProps.messages.length-1].markdown : '';
-        this.setState({rooms: nextProps.rooms, messages: nextProps.messages, latestMessage: latestMessage});
+        this.setState({modalIsOpen: false, rooms: nextProps.rooms, messages: nextProps.messages, latestMessage: latestMessage});
       }
     }
   }

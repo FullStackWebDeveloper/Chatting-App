@@ -23,10 +23,6 @@ import { getWorkspaces } from '../../WorkspaceReducer';
 
 
 class WorkspaceListPage extends Component {
-  componentDidMount() {
-    this.props.dispatch(fetchWorkspaces());
-  }
-
   componentWillReceiveProps(nextProps, nextState) {
     console.log("-------");
     console.log(nextProps);
