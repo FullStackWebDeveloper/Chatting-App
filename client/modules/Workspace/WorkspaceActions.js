@@ -55,7 +55,7 @@ export function fetchWorkspaces() {
 
 export function fetchWorkspace(data) {
   return {
-    type: GET_WORKSPACES_REQUEST,
+    type: GET_WORKSPACE_REQUEST,
     data: data
   };
   // return (dispatch) => {

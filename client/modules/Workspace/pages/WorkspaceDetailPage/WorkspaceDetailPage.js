@@ -33,6 +33,7 @@ export function WorkspaceDetailPage(props) {
 
 // Retrieve data from store as props
 function mapStateToProps(state, props) {
+  console.log(props.params.display_name)
   return {
     workspace: getWorkspace(state, props.params.display_name),
   };

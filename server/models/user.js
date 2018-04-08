@@ -11,10 +11,10 @@ const userSchema = new Schema({
   password: { type: 'String', required: true },
   cuid: { type: 'String', required: true },
   dateAdded: { type: 'Date', default: Date.now, required: true },
-  workspace_id: { type: 'String', required: true },
+  workspace_title: { type: 'String', required: true },
 });
-userSchema.index({username: 1, workspace_id: 1}, {unique: true});
-userSchema.index({email: 1, workspace_id: 1}, {unique: true});
+userSchema.index({username: 1, workspace_title: 1}, {unique: true});
+userSchema.index({email: 1, workspace_title: 1}, {unique: true});
 
 userSchema.pre('save', function(next) {
   var user = this;

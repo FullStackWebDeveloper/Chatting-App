@@ -48,6 +48,7 @@ export class MainArea extends Component {
   }
 
   sendMessage = () => {
+    console.log("sendMessge")
     if (this.state.message.value) {
       var newMessage = {
         author: this.props.username,

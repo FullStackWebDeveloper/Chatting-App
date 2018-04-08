@@ -7,10 +7,21 @@ import RegisterForm from '../../components/RegisterForm/RegisterForm';
 // Import Actions
 import { registerRequest } from '../../UserActions';
 import { getWorkspace } from '../../../Workspace/WorkspaceReducer';
+import { fetchWorkspaces } from '../../../Workspace/WorkspaceActions';
 
 class RegisterPage extends Component {
+
+  componentDidMount() {
+    if(!this.props.workspace) {
+      this.props.dispatch(fetchWorkspaces());
+    }
+  }
+  
+
   handleRegister = (email, username, password) => {
-      this.props.dispatch(registerRequest({email, username, password, workspace_id: this.props.workspace.cuid, current_url: this.props.params.display_name}));
+    console.log("--------")
+    console.log(this.props.params.display_name)
+    this.props.dispatch(registerRequest({email, username, password, workspace_title: this.props.params.display_name, current_url: this.props.params.display_name}));
   };
   render() {
     console.log(this.props);

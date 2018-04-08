@@ -1,6 +1,6 @@
 // Auth Actions
 import { REGISTER_SUCCESS, REGISTER_FAILURE, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT} from './UserActions';
-import { UPDATE_USER_INFO_SUCCESS, UPDATE_USER_INFO_FAILURE, LOAD_USER_PROPS} from './UserActions';
+import { UPDATE_USER_INFO_SUCCESS, UPDATE_USER_INFO_FAILURE, LOAD_USER_PROPS, GET_ALL_USERS} from './UserActions';
 
 // Initial State
 const initialState = {
@@ -24,7 +24,11 @@ const UserReducer = (state = initialState, action) => {
     case LOGIN_SUCCESS:
       return {
         ...state,
-        data: action.user,
+        data: {
+          user:  action.user,
+          username: action.user.username,
+          workspace: action.workspace
+        },
         error: null,
       };
 
@@ -43,7 +47,10 @@ const UserReducer = (state = initialState, action) => {
     case UPDATE_USER_INFO_SUCCESS:
       return {
         ...state,
-        data: action.user,
+        data: {
+          ...data,
+          user: action.user
+        }
       };
       
     case UPDATE_USER_INFO_FAILURE:
@@ -54,12 +61,16 @@ const UserReducer = (state = initialState, action) => {
     case LOAD_USER_PROPS:
       return {
         ...state,
-        data: action.user,
+        data: {
+          user:  action.user,
+          username: action.user.username,
+          workspace: action.workspace
+        }
       };
     case GET_ALL_USERS:
       return {
         ...state,
-        data: action.users,
+        users: action.users,
       }
     default:
       return state;
@@ -67,6 +78,7 @@ const UserReducer = (state = initialState, action) => {
 };
 
 export const getUser = state => state.user.data;
+export const getUsers = state => state.user.users;
 
 // Export Reducer
 export default UserReducer;

@@ -51,12 +51,13 @@ export function *fetchMessagesFlow() {
     let request = yield take(GET_MESSAGES_REQUEST);
 
     let data = {
-      api: `messages:${request.data}`,
+      api: `messages?channel_id=${request.data}`,
       type: "get",
       body: {}
     };
     let res = yield call(submit, data);
     if (res.messages) {
+      console.log(res.messages)
       yield put({ type: GET_MESSAGES, messages: res.messages });
     } else {
       console.log(res.err);
@@ -97,7 +98,7 @@ export function *addRoomFlow() {
           owner: request.data.owner,
           members: request.data.members,
           title: request.data.title,
-          workspace_id: request.data.workspace_id
+          workspace_title: request.data.workspace_title
         }
       }
     };
@@ -114,9 +115,9 @@ export function *addRoomFlow() {
 export function *fetchRoomsFlow() {
   while (true) {
     let request = yield take(GET_ROOMS_REQUEST);
-
+    console.log(request)
     let data = {
-      api: `rooms`,
+      api: `rooms?workspace_title=${request.data}`,
       type: "get",
       body: {}
     };

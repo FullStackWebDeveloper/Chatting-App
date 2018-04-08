@@ -4,12 +4,17 @@ import slug from 'limax';
 import sanitizeHtml from 'sanitize-html';
 
 export function getRooms(req, res) {
-  Room.find().sort('-created_at').exec((err, rooms) => {
-    if (err) {
-      res.status(500).send(err);
-    }
-    res.json({ rooms });
-  });
+  console.log(req)
+  if(req.query.workspace_title) {
+    Room.find({workspace_title: req.query.workspace_title}).sort('-created_at').exec((err, rooms) => {
+      if (err) {
+        res.status(500).send(err);
+      }
+      res.json({ rooms });
+    });
+  } else {
+    res.json([]);
+  }
 }
 
 export function addRoom(req, res) {
@@ -22,7 +27,7 @@ export function addRoom(req, res) {
   // Let's sanitize inputs
   newRoom.title = sanitizeHtml(newRoom.title);
   newRoom.owner = sanitizeHtml(newRoom.owner);
-  newRoom.workspace_id = sanitizeHtml(newRoom.workspace_id);
+  newRoom.workspace_title = sanitizeHtml(newRoom.workspace_title);
   newRoom.channel_id = cuid();
   
   newRoom.save((err, saved) => {

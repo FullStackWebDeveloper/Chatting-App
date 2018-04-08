@@ -5,7 +5,7 @@ import sanitizeHtml from "sanitize-html";
 
 export function getMessages(req, res) {
   // {created_date:{$gte: new Date().setDate(new Date().getDate()-7)}}
-  Message.find().sort("created_at").exec((err, messages) => {
+  Message.find({channel_id: req.query.channel_id}).sort("created_at").exec((err, messages) => {
     if (err) {
       res.status(500).send(err);
     }

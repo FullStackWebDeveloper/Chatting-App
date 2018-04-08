@@ -30,10 +30,11 @@ export class App extends Component {
 
   componentWillMount() {
     const loginResult = cookie.load('mernAuth');
+    console.log(loginResult)
     const token = loginResult ? loginResult.t : null;
     const username = loginResult ? loginResult.u : null;
     if(this.props.user == null && token && username) {
-      this.props.dispatch(loadUserProps( {username: username} ));
+      this.props.dispatch(loadUserProps( {token: token, username: username} ));
     } 
   }
     
@@ -46,6 +47,7 @@ export class App extends Component {
   };
 
   render() {
+    console.log(this.props)
     return (
       <div>
         {this.state.isMounted && !window.devToolsExtension && process.env.NODE_ENV === 'development' && <DevTools />}

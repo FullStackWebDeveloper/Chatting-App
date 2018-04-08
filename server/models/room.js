@@ -8,7 +8,7 @@ const roomsSchema = new Schema({
   created_at: { type: 'Date', default: Date.now, required: true },
   title: { type: 'String', required: true },
   type: { type: 'String', default: 'rooms', required: true },
-  workspace_id: { type: 'String', required: true },
+  workspace_title: { type: 'String', required: true },
 });
 
 export default mongoose.model('Rooms', roomsSchema);

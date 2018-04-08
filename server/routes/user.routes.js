@@ -17,4 +17,7 @@ router.route("/users/update").post(UserController.updateUserInfo);
 // Delete a user by cuid
 router.route("/users/:cuid").delete(UserController.deleteUser);
 
+// Confirm a user authorization
+router.route("/authorized").post(UserController.authorizedUser);
+ 
 export default router;

@@ -1,10 +1,10 @@
 import User from '../models/user';
+import Workspace from '../models/workspace';
 import secret from '../secret';
 import cuid from 'cuid';
 import crypto from 'crypto'; 
 import jwt from 'jsonwebtoken';
 import sanitizeHtml from 'sanitize-html';
-
 
 const errors = {
     REGISTER_USERNAME_TAKEN: 'That username is taken. Try another.',
@@ -13,7 +13,8 @@ const errors = {
     LOGIN_INVALID: 'Invalid password !',
     LOGIN_GENERAL_ERROR: 'Unregistered User !',
     USER_NOT_EXIST: 'Sorry, Specified account does not exist',
-    UNAUTHORIZED: 'Unauthorized'
+    UNAUTHORIZED: 'Unauthorized',
+    WORKSPACE_FIND_ERROR: 'Not existed Workspace'
 };
 
 export function register(req, res) {
@@ -50,21 +51,24 @@ export function register(req, res) {
 }
 
 export function login(req, res) {
-  if (!(req.body.user.email || req.body.user.username) || !req.body.user.password) {
-    return res.status(403).end();
+  if (!(req.body.user.email || req.body.user.username) || !req.body.user.password || !req.body.user.workspace_title) {
+    return res.json({err: errors.USER_NOT_EXIST});
   }
 
   var email = sanitizeHtml(req.body.user.email);
   var username = sanitizeHtml(req.body.user.username);
+  var workspace_title = sanitizeHtml(req.body.user.workspace_title);
   var data;
   if (email != 'undefined') {
       data = {
-          email: email
+          email: email,
+          workspace_title: workspace_title
       };
   }
   else if(username != 'undefined') {
       data = {
-          username: username
+          username: username,
+          workspace_title: workspace_title
       };
   } else {
       res.json({
@@ -88,12 +92,18 @@ export function login(req, res) {
         var token = jwt.sign({'id':user.cuid}, secret.secret, {
           expiresIn: 31536e3
         });
-        return res.json({
-           user: {
-            username: user.username,
-           },
-          token: token,
-        });
+
+        Workspace.findOne({ cuid: user.workspace_title}).exec((err, workspace) => {
+          if (err) {
+            return res.status(500).send({err: errors.WORKSPACE_FIND_ERROR}); 
+          }
+          return res.json({
+            user,
+            token: token,
+            workspace
+          });
+        })
+        
       }
       else {
         return res.json({err: errors.LOGIN_INVALID});
@@ -155,7 +165,7 @@ export function getUsers(req, res) {
         return res.status(500).send({err: errors.REGISTER_GENERAL_ERROR}); 
       }
       if(!user) return res.status(401).send({err: errors.UNAUTHORIZED});
-      User.find().sort('-dateAdded').exec((err, users) => {
+      User.find({workspace_title: req.query.workspace_title}).sort('-dateAdded').exec((err, users) => {
         if (err) {
           res.status(500).send(err);
         }
@@ -187,4 +197,32 @@ export function deleteUser(req, res) {
     }
     else res.status(500).send({err: errors.USER_NOT_EXIST});
   });
+}
+
+export function authorizedUser(req, res) {
+  if (!(req.body.user.token || req.body.user.username)) {
+    return res.status(403).end();
+  }
+
+  var token = sanitizeHtml(req.body.user.token);
+  var username = sanitizeHtml(req.body.user.username);
+  try {
+    var decoded = jwt.verify(token, secret.secret);
+    User.findOne({ cuid: decoded.id }).exec((err, user) => {
+      if (err) {
+        return res.status(500).send({err: errors.REGISTER_GENERAL_ERROR}); 
+      }
+      if(!user) return res.status(401).send({err: errors.UNAUTHORIZED});
+      Workspace.findOne({ cuid: user.workspace_title}).exec((err, workspace) => {
+        if (err) {
+          return res.status(500).send({err: errors.WORKSPACE_FIND_ERROR}); 
+        }
+        return res.json({ user, workspace });
+      })
+    });
+  } catch(err) {
+    // error during JWT verify
+    console.log('decoded error')
+    return res.status(401).send({err: errors.UNAUTHORIZED}); 
+  }
 }

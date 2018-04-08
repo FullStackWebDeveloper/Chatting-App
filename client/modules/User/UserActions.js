@@ -18,6 +18,7 @@ export const REGISTER_REQUEST = 'REGISTER_REQUEST'
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS'
 export const REGISTER_FAILURE = 'REGISTER_FAILURE'
 export const LOAD_USER_PROPS = 'LOAD_USER_PROPS';
+export const LOAD_USER_PROPS_REQUEST = 'LOAD_USER_PROPS_REQUEST';
 
 export const GET_ALL_USERS_REQUEST = 'GET_ALL_USERS_REQUEST';
 export const GET_ALL_USERS = 'GET_ALL_USERS';
@@ -52,10 +53,10 @@ export function updateUserInfoRequest(data) {
 }
 
 
-export function loadUserProps(user) {
+export function loadUserProps(data) {
   return {
-    type: LOAD_USER_PROPS,
-    user
+    type: LOAD_USER_PROPS_REQUEST,
+    data
   };
 }
 

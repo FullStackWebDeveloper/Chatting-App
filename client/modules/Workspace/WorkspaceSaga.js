@@ -35,16 +35,16 @@ export function* addWorkspaceFlow() {
         username: res.workspace.display_name,
         email: res.workspace.admin_user,
         password: request.data.workspace.password,
-        workspace_id: res.workspace.cuid
+        workspace_title: res.workspace.display_name
       }
-      yield put({ type: REGISTER_REQUEST, data: userData, current_url:  request.data.workspace.display_name});
+      yield put({ type: REGISTER_REQUEST, data: userData, workspace_title: request.data.workspace.display_name});
 
       let generalRoom = {
         owner:  res.workspace.display_name,
         members: [],
         title: 'General',
         type: 'general',
-        workspace_id: res.workspace.cuid
+        workspace_title: res.workspace.display_name
       }
       yield put({ type: ADD_ROOM_REQUEST, data: generalRoom });
       

@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { browserHistory } from 'react-router';
 import io from 'socket.io-client';
 
 // Import Components
@@ -10,20 +11,27 @@ import AddContact from "../../components/AddContact/AddContact";
 
 // Import Actions
 import { addMessageRequest, fetchMessages, fetchRooms } from '../../ChatActions';
+import { getUser, getUsers } from '../../../User/UserReducer';
+import { fetchAllUsers } from '../../../User/UserActions';
+import { getMessages, getRooms } from '../../ChatReducer';
 
 import styles from "./ChatPage.css";
-import { getMessages, getRooms } from '../../ChatReducer';
-import { getUser } from '../../../User/UserReducer';
 const socket = io('http://localhost:8001');
 
 class ChatPage extends Component {
   constructor(props) {
     super(props);
-    this.state ={modalIsOpen: false, rooms: this.props.rooms, messages: this.props.messages, latestMessage: '', selectedRoomID: ''}
-    this.props.dispatch(fetchRooms());
-
+    console.log("-------")
+    console.log(this.props)
+    this.state ={modalIsOpen: false, rooms: [], messages: this.props.messages, latestMessage: '', selectedRoomID: ''}
+    this.props.dispatch(fetchRooms(this.props.params.display_name));
+    this.props.dispatch(fetchAllUsers(this.props.params.display_name));
     this.openModal = this.openModal.bind(this);
     this.closeModal = this.closeModal.bind(this);
+  }
+
+  addRoom() {
+    console.log("asdf");
   }
 
   openModal() {
@@ -43,8 +51,15 @@ class ChatPage extends Component {
   }
 
   componentWillReceiveProps(nextProps, nextState) {
-    let latestMessage = nextProps.messages.length > 0 ? nextProps.messages[nextProps.messages.length-1].markdown : '';
-    this.setState({rooms: nextProps.rooms, messages: nextProps.messages, latestMessage: latestMessage});
+    if(!this.props.user) {
+      // browserHistory.push('/');
+    } else {
+      console.log(JSON.stringify(this.state.rooms) != JSON.stringify(nextProps.rooms))
+      if(JSON.stringify(this.state.rooms) != JSON.stringify(nextProps.rooms) || this.state.messages != nextProps.messages) {
+        let latestMessage = nextProps.messages.length > 0 ? nextProps.messages[nextProps.messages.length-1].markdown : '';
+        this.setState({rooms: nextProps.rooms, messages: nextProps.messages, latestMessage: latestMessage});
+      }
+    }
   }
 
   handleChatPage = (message) => {
@@ -53,6 +68,7 @@ class ChatPage extends Component {
 
   selectRoom = (channel_id) => {
     this.state.selectedRoomID = channel_id;
+    console.log(channel_id)
     this.props.dispatch(fetchMessages(channel_id));
   }
 
@@ -61,17 +77,18 @@ class ChatPage extends Component {
       <div className={styles.frame}>
         <SideBar modalOpen={this.openModal} selectRoom={this.selectRoom} username={this.props.user.username} rooms={this.state.rooms} latestMessage={this.state.latestMessage}/> 
         <MainArea addMessage={this.handleChatPage} username={this.props.user.username} messages={this.state.messages} selectedRoomID = {this.state.selectedRoomID} /> 
-        <AddContact isOpen={this.state.modalIsOpen} />
+        <AddContact addRoom={this.addRoom} isOpen={this.state.modalIsOpen} username={this.props.user.username} users={this.props.users} />
       </div>
     );
   }
 }
 
-ChatPage.need = [() => { return fetchRooms(); }];
+// ChatPage.need = [() => { return fetchRooms(); }];
 
 function mapStateToProps(state) {
   return {
     user: getUser(state),
+    users: getUsers(state),
     rooms: getRooms(state),
     messages: getMessages(state),
   };

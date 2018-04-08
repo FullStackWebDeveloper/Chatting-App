@@ -63,7 +63,6 @@ export default (
     />
     <Route
       path="/workspaces/:display_name"
-      onEnter={requireNotLoggedIn}
       getComponent={(nextState, cb) => {
         require.ensure([], require => {
           cb(

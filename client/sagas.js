@@ -1,6 +1,6 @@
 import { call, fork, take, put } from 'redux-saga/effects';
 import callApi from "./util/apiCaller";
-import { loginFlow, updateUserInfoFlow, registerFlow } from './modules/User/UserSagas';
+import { loadUserFlow, loginFlow, updateUserInfoFlow, registerFlow,fetchAllUsersFlow } from './modules/User/UserSagas';
 import { addMessageFlow, fetchMessagesFlow, deleteMessageFlow, addRoomFlow, fetchRoomsFlow, deleteRoomFlow } from './modules/Chat/ChatSagas';
 import { addWorkspaceFlow, fetchWrokspacesFlow, deleteWorkspaceFlow  } from "./modules/Workspace/WorkspaceSaga";
 
@@ -25,9 +25,11 @@ export function submit(data) {
 }
 
 export default function *rootSaga() {
+  yield fork(loadUserFlow);
   yield fork(loginFlow);
   yield fork(updateUserInfoFlow);
   yield fork(registerFlow);
+  yield fork(fetchAllUsersFlow);
   yield fork(addMessageFlow);
   yield fork(fetchMessagesFlow);
   yield fork(deleteMessageFlow);

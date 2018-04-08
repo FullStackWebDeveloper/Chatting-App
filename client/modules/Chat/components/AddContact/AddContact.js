@@ -23,19 +23,22 @@ export class AddContact extends React.Component {
   }
 
   getInitialState = () => {
+    let users = [];
+    if(this.props.users)
+    this.props.users.forEach(user => {
+      if(user.username != this.props.username) {
+        users.push({
+          label: user.username,
+          value: user.username
+        });
+      }
+    });
       return {
         show: false,
         selectedOption: [""],
         value: null,
         title: null,
-        options: [
-          { label: "Chocolate", value: "chocolate" },
-          { label: "Vanilla", value: "vanilla" },
-          { label: "Strawberry", value: "strawberry" },
-          { label: "Caramel", value: "caramel" },
-          { label: "Cookies and Cream", value: "cookiescream" },
-          { label: "Peppermint", value: "peppermint" }
-        ]
+        users: users
       }
   }
 
@@ -67,8 +70,9 @@ export class AddContact extends React.Component {
     this.setState({ ...this.getInitialState(), show: nextProps.isOpen });
   }
 
-  addMessage = () => {
+  addContact = () => {
     if (this.state.value && this.state.title) {
+        console.log(this.state.value)
         console.log("success valid");
     } else {
         console.log("wrong valid");
@@ -124,7 +128,7 @@ export class AddContact extends React.Component {
                 disabled={false}
                 multi
                 onChange={this.handleSelectChange}
-                options={this.state.options}
+                options={this.state.users}
                 placeholder="Select your friend(s)"
                 simpleValue
                 value={this.state.value}
@@ -134,7 +138,7 @@ export class AddContact extends React.Component {
             </FormGroup>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={this.addMessage}>Add Contact</Button>
+            <Button onClick={this.addContact}>Add Contact</Button>
             <Button onClick={this.handleHide}>Close</Button>
           </Modal.Footer>
         </Modal>
@@ -144,7 +148,7 @@ export class AddContact extends React.Component {
 }
 
 AddContact.propTypes = {
-  // addMessage: PropTypes.func.isRequired
+  addRoom: PropTypes.func.isRequired
 };
 
 export default injectIntl(AddContact);
