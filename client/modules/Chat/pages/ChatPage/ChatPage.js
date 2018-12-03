@@ -10,7 +10,7 @@ import { SideBar } from '../../components/SideBar/SideBar';
 import AddContact from "../../components/AddContact/AddContact";
 
 // Import Actions
-import { addMessageRequest, fetchMessages, fetchRooms, addRoomRequest } from '../../ChatActions';
+import { addMessageRequest, addNewClientMessageRequest, fetchMessages, fetchRooms, addRoomRequest } from '../../ChatActions';
 import { getUser, getUsers } from '../../../User/UserReducer';
 import { fetchAllUsers } from '../../../User/UserActions';
 import { getMessages, getRooms } from '../../ChatReducer';
@@ -45,8 +45,14 @@ class ChatPage extends Component {
   componentDidMount() {
     // this.props.dispatch(fetchMessages('cjfg9ys8y000030ui87jffylq'));
     socket.on('new message', message=> {
-      if(this.props.user.username != message.author && this.props.selectedRoomID == message.channel_id || this.state.rooms.filter(r => r.channel_id == message.channel_id)[0].type == "general")
-      this.setState({modalIsOpen: false, rooms: this.state.rooms, messages: [...this.state.messages, message], latestMessage: message.markdown});
+      console.log("-----------");
+      console.log(message.author == this.props.user);
+      console.log(this.props.user);
+      if(this.props.user.username != message.author && (this.props.selectedRoomID == message.channel_id || this.state.rooms.filter(r => r.channel_id == message.channel_id)[0].type == "general")) {
+        console.log("[][][][][][]")
+        this.props.dispatch(addNewClientMessageRequest(message));
+        // this.setState({modalIsOpen: false, rooms: this.state.rooms, messages: [...this.state.messages, message], latestMessage: message.markdown});
+      }
     });
   }
 

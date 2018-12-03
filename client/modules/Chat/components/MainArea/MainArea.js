@@ -24,6 +24,7 @@ export class MainArea extends Component {
 
   showChatHistroy() {
     console.log(styles["message-date"])
+    console.log(this.props)
     let chatHistories = [];
     let date = "";
     this.props.messages.forEach((m, index)=>{

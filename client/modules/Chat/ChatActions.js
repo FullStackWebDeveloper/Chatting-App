@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 const socket = io('http://localhost:8001');
 // Export Constants
 export const ADD_MESSAGE_REQUEST    = 'ADD_MESSAGE_REQUEST';
+export const ADD_NEW_CLIENT_MESSAGE_REQUEST    = 'ADD_NEW_CLIENT_MESSAGE_REQUEST';
 export const ADD_MESSAGE            = 'ADD_MESSAGE';
 export const GET_MESSAGES_REQUEST   = 'GET_MESSAGES_REQUEST';
 export const GET_MESSAGES           = 'GET_MESSAGES';
@@ -27,6 +28,25 @@ export function addMessage(message) {
 export function addMessageRequest(data) {
   return {
     type: ADD_MESSAGE_REQUEST,
+    data,
+  };
+  // return (dispatch) => {
+  //   return callApi('messages', 'post', {
+  //     message: {
+  //       author: message.author,
+  //       channel_id: message.channel_id,
+  //       markdown: message.markdown,
+  //     },
+  //   }).then(res => {
+  //     socket.emit('new message', res.message);
+  //     dispatch(addMessage(res.message));
+  //   });
+  // };
+}
+
+export function addNewClientMessageRequest(data) {
+  return {
+    type: ADD_NEW_CLIENT_MESSAGE_REQUEST,
     data,
   };
   // return (dispatch) => {

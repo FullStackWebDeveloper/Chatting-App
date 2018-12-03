@@ -6,6 +6,7 @@ const socket = io("http://localhost:8001");
 
 import {
   ADD_MESSAGE_REQUEST,
+  ADD_NEW_CLIENT_MESSAGE_REQUEST,
   ADD_MESSAGE,
   GET_MESSAGES_REQUEST,
   GET_MESSAGES,
@@ -39,6 +40,19 @@ export function *addMessageFlow() {
     if (res.message) {
       socket.emit("new message", res.message);
       yield put({ type: ADD_MESSAGE, message: res.message });
+    } else {
+      console.log(res.err);
+      // yield put({ type: ADD_MESSAGE_FAILURE, err: res.err });
+    }
+  }
+}
+
+export function *addNewClientMessageFlow() {
+  while (true) {
+    let request = yield take(ADD_NEW_CLIENT_MESSAGE_REQUEST);
+    console.log(request.data)
+    if (request.data) {
+      yield put({ type: ADD_MESSAGE, message: request.data });
     } else {
       console.log(res.err);
       // yield put({ type: ADD_MESSAGE_FAILURE, err: res.err });
